@@ -1,74 +1,195 @@
-import { Image, StyleSheet, Platform } from 'react-native';
+import { StatusBar } from "expo-status-bar";
+import React, { useState } from "react";
+import { Text, View, FlatList, SafeAreaView, StyleSheet, ImageBackground, Dimensions, TouchableOpacity } from "react-native";
 
-import { HelloWave } from '@/components/HelloWave';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
+const {height} = Dimensions.get('window');
+// const LogoUrl = ''
 
 export default function HomeScreen() {
+  const boxes=['','','','','','','','',''];
+  const [array, setArray] = useState(boxes);
+  const [message, setMessage] = useState('');
+
+  const HorizontalMatches = (tempArray: string | any[], value: string) => {
+    if (tempArray[0] === value && tempArray[1] === value && tempArray[2] === value) {
+      setMessage(`Player ${value} Wins!`);
+    }
+    if (tempArray[3] === value && tempArray[4] === value && tempArray[5] === value) {
+      setMessage(`Player ${value} Wins!`);
+    }
+    if (tempArray[6] === value && tempArray[7] === value && tempArray[8] === value) {
+      setMessage(`Player ${value} Wins!`);
+    }
+  }
+  const VerticalMatches =(tempArray: string | any[], value: string) => {
+    if (tempArray[0] === value && tempArray[3] === value && tempArray[6] === value) {
+      setMessage(`Player ${value} Wins!`);
+    }
+    if (tempArray[1] === value && tempArray[4] === value && tempArray[7] === value) {
+      setMessage(`Player ${value} Wins!`);
+    }
+    if (tempArray[2] === value && tempArray[5] === value && tempArray[8] === value) {
+      setMessage(`Player ${value} Wins!`);
+    }
+  }
+  const DiagonalMatches =(tempArray: string | any[], value: string) => {
+    if (tempArray[0] === value && tempArray[4] === value && tempArray[8] === value) {
+      setMessage(`Player ${value} Wins!`);
+    }
+    if (tempArray[2] === value && tempArray[4] === value && tempArray[6] === value) {
+      setMessage(`Player ${value} Wins!`);
+    }
+  }
+
+  const getWinner = (tempArray: string | any[], value: string) => {
+    if (tempArray.length <=0) {return false;}
+
+    HorizontalMatches(tempArray,value);
+    VerticalMatches(tempArray,value);
+    DiagonalMatches(tempArray,value);
+  }
+
+  const handlePress = (index: number) => {
+    if (array[index] !== "" || message !== "") return;
+    const value = array.filter((x) => x !== "").length % 2 === 0 ? "X" : "O";
+    const newArray = [...array];
+    newArray[index] = value;
+    setArray(newArray);
+    getWinner(newArray, value);
+    
+  };
+
+  const ResetGame = () => {
+    setArray(boxes);
+    setMessage('');
+  }
+
+
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12'
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-        <ThemedText>
-          Tap the Explore tab to learn more about what's included in this starter app.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          When you're ready, run{' '}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+    <>
+      <SafeAreaView style={styles.SafeAreaView}/>
+      <SafeAreaView style={styles.topTextCtn}>
+        <Text style={styles.topText}>Tic Tac Toe</Text>
+      </SafeAreaView>
+      <StatusBar/>
+      <SafeAreaView style={styles.ScreenContainer}>
+        <View style={styles.TicTacToeCtn}>
+          <FlatList numColumns={3} keyExtractor={(item, index)=> index.toString()} data={array} renderItem={({item, index}) => {
+            return(
+              <TouchableOpacity style={styles.BoxCtn} onPress={() => handlePress(index)}>
+                  <Text style={[
+                    styles.selection,{
+                      color:item==='X' ? 'red' : 'blue'
+                    }
+                  ]}>{item}</Text>
+              </TouchableOpacity>
+            );
+          }}/>
+        </View>
+
+        {/* Winner Text Container  */}
+        <View style={styles.WinnerTxtCtn}>
+            <Text style={[
+                    styles.selection,{
+                      color:message==='Player X Wins!' ? 'red' : 'blue'
+                    }
+                  ]}>{message}</Text>
+          </View>
+
+        {/* Reset Button  */}
+        <View style={styles.resetBtnCtn}>
+          <TouchableOpacity style={styles.resetBtn} onPress={ResetGame}>
+            <Text style={styles.resetBtnText}>Reset Game</Text>
+          </TouchableOpacity>
+        </View>
+      </SafeAreaView>
+    </>
   );
 }
 
-const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
+const styles= StyleSheet.create({
+  SafeAreaView: {
+      flex:0,
+      backgroundColor:'black',
+      height: Dimensions.get('window').height*0.05
   },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
+  ScreenContainer:{
+      flex:1,
   },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
+  BoxCtn:{
+      borderWidth:5,
+      borderColor:'white',
+      backgroundColor: 'black',
+      width: 100,
+      height: 100,
+      margin: 15,
+      alignItems:'center',
+      justifyContent: 'center',
+      borderRadius:20,
   },
-});
+  TicTacToeCtn:{
+      paddingTop:5,
+      backgroundColor:'black',
+      justifyContent:'center',
+      alignItems:'center',
+      borderBottomColor:'black',
+      borderBottomWidth:5,
+  },
+  selection:{
+      fontSize:50,
+  },
+  resetBtnCtn:{
+      borderTopWidth:5,
+      borderTopColor:'black',
+      backgroundColor:'white',
+      position:'absolute',
+      bottom:0,
+      width:"100%",
+      padding:15,
+
+  },
+  resetBtn: {
+      backgroundColor:'black',
+      alignItems:'center',
+      justifyContent:'center',
+      padding:15,
+      borderRadius:20,
+
+  },
+  resetBtnText:{
+      color:'white',
+      fontSize:30,
+      fontWeight:'bold',
+  },
+
+  topTextCtn:{
+    flex:0,
+    
+    padding: 25,
+    backgroundColor:'black',
+  },
+  topText:{
+      paddingTop:50,
+      paddingBottom:0,
+      paddingLeft:100,
+      color:'white',
+      fontSize:30,
+      fontWeight:'bold',
+  },
+  WinnerTxtCtn:{
+      padding:15,
+      paddingBottom:70,
+      backgroundColor:'black',
+      alignItems:'center',
+      justifyContent:'center',
+  },
+
+  WinnerTxt:{
+    fontSize:50,
+    color:'white',
+    fontWeight:'bold',
+    alignItems:'center',
+    justifyContent:'center',
+  }
+}
+)
