@@ -1,20 +1,25 @@
 "use client";
 import React, {useState} from "react";
 import { View, Text, Image, StyleSheet } from "react-native";
+import { SafeAreaView } from "react-native";
 
 export default function UserScreen() {
     const [userName, setUserName] = useState('Joanne Smith');
     const [userEmail, setUserEmail] = useState('joanne.smith@gmail.com');
 
     return(
-        <View style={styles.container}>
-            <Text style={styles.profileName}>User Page</Text>
-            <View style= {styles.container}>
-                <Image style={styles.profileImage} source={require("../src/assets/ProfilePicture.png")}/>
+        <>
+            <View style={styles.container}>
+                <SafeAreaView>
+                    <Text style={styles.heading}>User Page</Text>
+                </SafeAreaView>
+                <SafeAreaView style={styles.profileContainer}>
+                    <Image style={styles.profileImage} source={require("../src/assets/ProfilePicture.png")}/>
+                    <Text style={styles.profileName}>{userName}</Text>
+                    <Text style={styles.profileEmail}>{userEmail}</Text>
+                </SafeAreaView>
             </View>
-            <Text style={styles.profileName}>{userName}</Text>
-            <Text style={styles.profileEmail}>{userEmail}</Text>
-        </View>
+        </>
     );
 }
 
@@ -27,7 +32,10 @@ const styles= StyleSheet.create({
         padding:20,
     },
     profileContainer: {
-        alignItems:'center'
+        alignItems:'center',
+        justifyContent:'center',
+        width:'100%',
+        flexDirection:'column',
     },
     profileImage: {
         width:100,
@@ -35,14 +43,25 @@ const styles= StyleSheet.create({
         borderRadius:50,
         marginBottom:10,
     },
+    heading: {
+        fontSize:30,
+        position:'absolute',
+        top:-250,
+        right:-75,
+        fontWeight:'bold',
+        color: '#333',
+        marginBottom: 5,
+    },
     profileName: {
         fontSize:20,
         fontWeight:'bold',
         color: '#333',
         marginBottom: 5,
+        textAlign:'center',
     },
     profileEmail: {
         fontSize:16,
-        color:'#777'
+        color:'#777',
+        textAlign:'center',
     }
 })
