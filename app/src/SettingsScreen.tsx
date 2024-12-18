@@ -7,11 +7,15 @@ export default function SettingsScreen() {
     const [userName, setUserName] = useState("Joanne Smith");
     const [userImg, setUserImg] = useState(require('../src/assets/ProfilePicture.png'));
 
+    //Function to Handle OnPress Logout Button
     const handleLogout = () => {
         setMessage('Log Out Successfully');
         setUserName("No Name");
         setUserImg(require('../src/assets/Default_pfp.png'));
     }
+    
+    //Function to Handle OnPress SwitchAccount Button
+    //Switches between 2 pre-made accounts, Joanne Smith and Joe Smith
     const handleSwitchAccount = () => {
         if (userName === "Mo Name") {
             setUserName("Joanne Smith");
@@ -36,14 +40,17 @@ export default function SettingsScreen() {
                     <Text style={styles.profileName}>{userName}</Text>
                 </View>
 
-                {/* Logout Message  */}
+                {/* Logout/Switch Account Successful Message  */}
                 {message ? <Text style={styles.message}>{message}</Text>: null}
 
-                {/* LogOut Button  */}
+                
                 <View style={styles.profileContainer}>
+                    {/* LogOut Button */}
                     <TouchableOpacity onPress={handleLogout} style={styles.button}>
                         <Text style={styles.buttonText}>Log Out</Text>
                     </TouchableOpacity>
+
+                    {/* Switch Account Button */}
                     <TouchableOpacity onPress={handleSwitchAccount} style={styles.button}>
                         <Text style={styles.buttonText}>Switch Account</Text>
                     </TouchableOpacity>
@@ -53,6 +60,7 @@ export default function SettingsScreen() {
     );
 }
 
+//Styles
 const styles = StyleSheet.create({
     container: {
         flex:1,

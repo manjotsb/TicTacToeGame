@@ -3,6 +3,7 @@ import React, {useState} from "react";
 import { View, Text, Image, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native";
 
+//This Page displays the user info
 export default function UserScreen() {
     const [userName, setUserName] = useState('Joanne Smith');
     const [userEmail, setUserEmail] = useState('joanne.smith@gmail.com');
@@ -10,9 +11,11 @@ export default function UserScreen() {
     return(
         <>
             <View style={styles.container}>
+                {/* Heading  */}
                 <SafeAreaView>
                     <Text style={styles.heading}>User Page</Text>
                 </SafeAreaView>
+                {/* User Info  */}
                 <SafeAreaView style={styles.profileContainer}>
                     <Image style={styles.profileImage} source={require("../src/assets/ProfilePicture.png")}/>
                     <Text style={styles.profileName}>{userName}</Text>
@@ -23,6 +26,8 @@ export default function UserScreen() {
     );
 }
 
+
+//Styles
 const styles= StyleSheet.create({
     container: {
         flex:1,

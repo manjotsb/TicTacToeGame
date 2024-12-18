@@ -13,6 +13,7 @@ export default function HomeScreen({ navigation }: { navigation: any }): React.J
   const [array, setArray] = useState(boxes);
   const [message, setMessage] = useState('');
 
+  //Function to Check Horizontal Matches
   const HorizontalMatches = (tempArray: string[], value: string) => {
     if (tempArray[0] === value && tempArray[1] === value && tempArray[2] === value) {
       setMessage(`Player ${value} Wins!`);
@@ -25,6 +26,7 @@ export default function HomeScreen({ navigation }: { navigation: any }): React.J
     }
   }
 
+  //Function to Check Vertical Matches
   const VerticalMatches = (tempArray: string[], value: string) => {
     if (tempArray[0] === value && tempArray[3] === value && tempArray[6] === value) {
       setMessage(`Player ${value} Wins!`);
@@ -37,6 +39,7 @@ export default function HomeScreen({ navigation }: { navigation: any }): React.J
     }
   }
 
+  //Function to Check Diagonal Matches
   const DiagonalMatches = (tempArray: string[], value: string) => {
     if (tempArray[0] === value && tempArray[4] === value && tempArray[8] === value) {
       setMessage(`Player ${value} Wins!`);
@@ -46,6 +49,7 @@ export default function HomeScreen({ navigation }: { navigation: any }): React.J
     }
   }
 
+  //Function to Display the winner
   const getWinner = (tempArray: string[], value: string) => {
     if (tempArray.length <= 0) { return false; }
 
@@ -58,6 +62,7 @@ export default function HomeScreen({ navigation }: { navigation: any }): React.J
     }
   };
 
+  //HandlePress function for Board
   const handlePress = (index: number) => {
     if (array[index] !== "" || message !== "") return;
     const value = array.filter((x) => x !== "").length % 2 === 0 ? "X" : "O";
@@ -71,6 +76,7 @@ export default function HomeScreen({ navigation }: { navigation: any }): React.J
     }
   };
 
+  //Function To Reset Gamme
   const ResetGame = () => {
     setArray(boxes);
     setMessage('');
@@ -81,6 +87,7 @@ export default function HomeScreen({ navigation }: { navigation: any }): React.J
     <>
       <View style={styles.SafeAreaView} />
       <StatusBar />
+      {/* Game Board  */}
       <SafeAreaView style={styles.ScreenContainer}>
         <View style={styles.TicTacToeCtn}>
           <FlatList
@@ -127,6 +134,7 @@ export default function HomeScreen({ navigation }: { navigation: any }): React.J
   );
 }
 
+//Styles
 const styles = StyleSheet.create({
   SafeAreaView: {
     flex: 0,
